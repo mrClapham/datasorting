@@ -32,7 +32,7 @@
         mergeDedupe:function(a,b) {
             var result = [],endWord, nextWord;
 
-            var resultHashMap = [];
+            if(!b) return a;
             while (a.length > 0 && b.length > 0) {
                 endWord= result[result.length-1];
                 if (a[0] < b[0]) {
@@ -40,13 +40,9 @@
                 } else {
                     nextWord  = b.shift();
                 }
-//                if(result.length < 1){
-//                    result.push(nextWord);
-//                }
+
                 if(nextWord && nextWord !== endWord){
                     result.push(nextWord);
-                }else{
-
                 }
             }
             return result.concat(a.length? a : b);
@@ -57,9 +53,36 @@
             var subLeft = this.deDupe(arr.slice(0,mid));
             var subRight = this.deDupe(arr.slice(mid));
             return  this.mergeDedupe(subLeft, subRight);
+        },
+        ////
+        mergeDedupeCount:function(a,b,hash) {
+            var result = [],endWord, nextWord;
+            if(!b) return {result:a, hash:hash};
+
+            while (a.length > 0 && b.length > 0) {
+                endWord= result[result.length-1];
+                if (a[0] < b[0]) {
+                    nextWord  = a.shift();
+                } else {
+                    nextWord  = b.shift();
+                }
+                if(nextWord && nextWord !== endWord){
+                    result.push(nextWord);
+                }
+                hash[nextWord] ? hash[nextWord] ++ : hash[nextWord] = 1;
+            }
+            return {result: result.concat(a.length? a : b), hash:hash};
+        },
+        deDupeCount:function(arr, hash){
+            if (arr.length < 2) return {result:arr, hash:hash};
+            var mid = Math.floor(arr.length /2);
+            var subLeft = this.deDupeCount(arr.slice(0,mid), hash).result;
+            var subRight = this.deDupeCount(arr.slice(mid), hash).result;
+            return  this.mergeDedupeCount(subLeft, subRight, hash);
         }
+
     };
 
-console.log(sorting.deDupe(arr))
+console.log(sorting.deDupeCount(arr,[]));
 
 </script>
