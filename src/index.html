@@ -79,10 +79,22 @@
             var subLeft = this.deDupeCount(arr.slice(0,mid), hash).result;
             var subRight = this.deDupeCount(arr.slice(mid), hash).result;
             return  this.mergeDedupeCount(subLeft, subRight, hash);
+        },
+        simpleDeDupe:function(arr){
+            var retArr = [];
+            for(var i =0; i< arr.length; i++){
+                var _name = String(arr[i]);
+                if(_name && _name.length > 1 && isNaN(arr[i])){
+                    retArr[_name] ? retArr[_name].count ++ : retArr[_name] = {name:_name, count:1};
+                    if(_name === "11"){
+                        console.log(retArr[_name])
+                    }
+                }
+            }
+            return retArr.sort();
         }
-
     };
 
-console.log(sorting.deDupeCount(arr,[]));
+console.log(sorting.simpleDeDupe(arr));
 
 </script>
